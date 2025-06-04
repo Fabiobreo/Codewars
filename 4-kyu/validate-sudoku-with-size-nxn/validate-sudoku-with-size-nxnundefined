@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+​
+public class Sudoku
+{
+    private readonly int[][] board;
+    private readonly int boardWidth;
+    private readonly int segmentWidth;
+​
+    public Sudoku(int[][] sudokuData)
+    {
+        board = sudokuData;
+        boardWidth = sudokuData.Length;
+        segmentWidth = (int)Math.Sqrt(boardWidth);
+    }
+​
+    public bool IsValid()
+    {
+        return 
+            GetRows().All(IsComponentValid) && 
+            GetColumns().All(IsComponentValid) && 
+            GetSegments().All(IsComponentValid);
+    }
+​
+    public IEnumerable<int> GetRow(int row)
+    {
+        return board[row];
+    }
+​
+    public IEnumerable<int> GetColumn(int column)
+    {
+        return board.Select(r => r[column]);
+    }
+​
+    public IEnumerable<int> GetSegment(int x, int y)
+    {
+        return board
+            .Where((r, ri) => ri / segmentWidth == x)
+            .SelectMany(r => r.Where((c, ci) => ci / segmentWidth == y));
+    }
