@@ -1,0 +1,43 @@
+​
+                                // Check bounds
+                                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols)
+                                {
+                                    // If a neighbor is a ship cell (1)
+                                    if (field[nr, nc] == 1)
+                                    {
+                                        // Check if this neighbor cell is part of the *current* ship being validated.
+                                        // If it's not part of the current ship, it means there is contact
+                                        // (either diagonal or touching the end of another ship).
+                                        bool isNeighborPartOfCurrentShip = false;
+                                        foreach(var shipCell in currentShipCells)
+                                        {
+                                            if(shipCell.Item1 == nr && shipCell.Item2 == nc)
+                                            {
+                                                isNeighborPartOfCurrentShip = true;
+                                                break;
+                                            }
+                                        }
+​
+                                        if (!isNeighborPartOfCurrentShip)
+                                        {
+                                            return false; // Illegal contact with another ship
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+​
+            // Final check of the total number of ships of each size
+            if (shipCounts[0] != 4) return false; // Must have 4 submarines (size 1)
+            if (shipCounts[1] != 3) return false; // Must have 3 destroyers (size 2)
+            if (shipCounts[2] != 2) return false; // Must have 2 cruisers (size 3)
+            if (shipCounts[3] != 1) return false; // Must have 1 battleship (size 4)
+​
+            // If all checks passed, the battlefield is valid
+            return true;
+        }
+    }
+}
